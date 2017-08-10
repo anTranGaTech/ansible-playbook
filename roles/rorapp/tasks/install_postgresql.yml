@@ -1,5 +1,7 @@
 - name: yumリポジトリをインストル
-  command: yum localinstall -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
+  yum:
+    validate_certs: yes
+    name: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
   tags: database
 
 - name: PostgreSQLインストル

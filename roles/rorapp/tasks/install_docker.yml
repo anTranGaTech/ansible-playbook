@@ -3,7 +3,9 @@
   tags: docker
 
 - name: start docker
-  command: service docker start
+  service:
+    name: docker
+    state: started
   tags: docker
 
 - name: epel-release should be installed
@@ -19,7 +21,9 @@
   tags: docker
 
 - name: upgrade python
-  command: yum upgrade -y python*
+  yum:
+    name: python*
+    state: latest
   tags: docker
 
 - name: add vagrant user to docker group
