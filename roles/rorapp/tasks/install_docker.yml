@@ -16,6 +16,12 @@
 
 - name: install docker-compose
   command: pip install docker-compose
+  tags: docker
 
 - name: upgrade python
-  command: yum upgrade python*
+  command: yum upgrade -y python*
+  tags: docker
+
+- name: add vagrant user to docker group
+  command: usermod -aG docker vagrant
+  tags: docker
