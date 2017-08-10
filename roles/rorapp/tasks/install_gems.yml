@@ -1,0 +1,8 @@
+# Install nokogiri with use-system-libraries build flag
+- name: install gem nokogiri
+  shell: gem install nokogiri -- --use-system-libraries
+  tags: gem
+
+- name: install gem rails
+  shell: gem install rails
+  tags: gem

@@ -1,0 +1,51 @@
+---
+- name: be sure ruby is installed
+  yum: name=ruby state=latest
+  tags: ruby
+
+- name: packages should be installed
+  yum: name={{ item }} state=latest
+  with_items:
+    - gcc-c++
+    - openssl-devel
+    - zlib-devel
+    - curl-devel
+    - mysql-devel
+    - readline-devel
+    - libevent-devel
+    - libxml2
+    - libxslt
+    - libxml2-devel
+    - libxslt-devel
+
+- name: get ruby version
+  command: "ruby -e 'puts RUBY_VERSION'"
+  register: installed_ruby_version
+
+- name: get ruby source
+  get_url: url=http://cache.ruby-lang.org/pub/ruby/2.4/ruby-{{ ruby_version }}.tar.gz dest={{ src_dir }}
+  when: installed_ruby_version.stdout | version_compare(ruby_version, '!=')
+
+- name: expand ruby
+  command: tar zxvf {{ src_dir }}/ruby-{{ ruby_version }}.tar.gz chdir={{ src_dir }}
+  when: installed_ruby_version.stdout | version_compare(ruby_version, '!=')
+
+- name: compile
+  command: chdir={{ src_dir }}/ruby-{{ ruby_version }} ./configure --prefix=/usr
+  when: installed_ruby_version.stdout | version_compare(ruby_version, '!=')
+
+- name: ruby should be built
+  command: chdir={{ src_dir }}/ruby-{{ ruby_version }} make
+  when: installed_ruby_version.stdout | version_compare(ruby_version, '!=')
+
+- name: ruby should be installed
+  command: chdir={{ src_dir }}/ruby-{{ ruby_version }} make install
+  args:
+    creates: "/usr/local/rvm/gems/ruby-{{ ruby_version }}"
+  when: installed_ruby_version.stdout | version_compare(ruby_version, '!=')
+
+- name: update rubygems
+  command: gem update --system
+
+- name: bundler gem should be installed
+  command: gem install bundler

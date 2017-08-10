@@ -1,0 +1,21 @@
+- name: docker should be installed
+  yum: name=docker
+  tags: docker
+
+- name: start docker
+  command: service docker start
+  tags: docker
+
+- name: epel-release should be installed
+  yum: name=epel-release
+  tags: docker
+
+- name: python-pip should be install
+  yum: name=python-pip
+  tags: docker
+
+- name: install docker-compose
+  command: pip install docker-compose
+
+- name: upgrade python
+  command: yum upgrade python*
