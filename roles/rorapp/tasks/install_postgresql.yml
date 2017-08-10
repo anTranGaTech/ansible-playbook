@@ -1,20 +1,12 @@
-- name: "Stage 1: install repository package"
-  yum: 
-    state: present
-    pkg: "{{ item.repo }}"
-  when: item.version == "{{ postgresql_version }}"
-  with_items: postgresql_repo_{{ ansible_distribution }}
+- name: yumリポジトリをインストル
+  command: yum localinstall -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
+  tags: database
 
-- name: "Stage 1: install postgresql packages"
-  yum: 
-    state: latest
-    pkg: "{{ item }}"
+- name: PostgreSQLインストル
+  yum: name={{item}} state=installed
   with_items:
-    - postgresql{{ postgresql_version |replace('.', '') }}-server
-    - python-psycopg2
-
-- name: "Stage 1: install postgresql contrib package"
-  yum: 
-    state: latest
-    pkg: postgresql{{ postgresql_version |replace('.', '') }}-contrib
-  when: postgresql_contrib
+    - postgresql96
+    - postgresql96-server
+    - postgresql96-libs
+    - postgresql96-contrib
+  tags: database

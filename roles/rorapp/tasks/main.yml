@@ -2,3 +2,4 @@
 - include: install_ruby.yml
 - include: install_gems.yml
 - include: install_docker.yml
+- include: install_postgresql.yml
